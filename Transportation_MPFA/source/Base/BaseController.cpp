@@ -147,6 +147,8 @@ void BaseController::SetIsHeadingToNest(bool n) {
 }
 
 void BaseController::SetNextMovement() {
+  //VS: Should we also set msgs here regarding movement location to other swarmies?
+  
 	argos::CRadians AngleTol;
 	float DistTol;
 	

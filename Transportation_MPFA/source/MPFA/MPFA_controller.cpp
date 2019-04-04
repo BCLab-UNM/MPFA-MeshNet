@@ -432,7 +432,11 @@ void MPFA_controller::Departing()
 }
 
 void MPFA_controller::Searching() {
- //LOG<<"Searching..."<<endl;
+  //VS: Add code that pings msg at a certain radius
+
+  //VS: Add code that acts as a listener for other robot's pinged msgs.
+
+  //LOG<<"Searching..."<<endl;
 	// "scan" for food only every half of a second
 	if((SimulationTick() % (SimulationTicksPerSecond() / 2)) == 0) {
 		SetHoldingFood();
@@ -441,7 +445,9 @@ void MPFA_controller::Searching() {
 	if(IsHoldingFood() == false) {
 		 argos::CVector2 distance = GetPosition() - GetTarget();
 		 argos::Real     random   = RNG->Uniform(argos::CRange<argos::Real>(0.0, 1.0));
-     
+
+		 //VS: Can use this condition to also ping msg of resource location.		
+	  
          // If we reached our target search location, set a new one. The 
 	     // new search location calculation is different based on whether
 	     // we are currently using informed or uninformed search.
@@ -620,6 +626,8 @@ void MPFA_controller::Returning() {
               placementPosition.Set(ClosestNest->GetLocation().GetX()+RNG->Gaussian(0.1, 0), ClosestNest->GetLocation().GetY()+RNG->Gaussian(0.1, 0));
      
           ClosestNest->FoodList.push_back(placementPosition);
+	  //VS: use bottom code to update location of nearest nest and ping msgs?
+	  
           //Update the location of the nest qilu 09/10
           num_targets_collected++;
           ClosestNest->num_collected_tags++;
@@ -703,6 +711,7 @@ void MPFA_controller::Returning() {
 		    
 
 		    isGivingUpSearch = false;
+		    //VS: Can we use this boolean to create an if-condition that will send out a msg that tells nearby swarmies that there are no known resources here...avoid.
 		    MPFA_state = DEPARTING; 
         isHoldingFood = false; 
 		    travelingTime+=SimulationTick()-startTime;//qilu 10/22
@@ -1105,6 +1114,7 @@ void MPFA_controller::UpdateTargetRayList() {
 }
 
 void MPFA_controller::SetClosestNest(){//qilu 07/26/2016
+  //VS: Implement code that will send out msg to the closest nest about resource allocation?
     Nest* NewClosestNest;
     CVector2 robotPos = GetPosition();
     Real minSquaredLen = (LoopFunctions->Nests[0].GetLocation()-robotPos).SquareLength();
