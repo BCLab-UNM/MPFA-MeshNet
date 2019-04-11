@@ -8,6 +8,7 @@
 #include <argos3/core/simulator/entity/floor_entity.h>
 /* Definition of the LEDs actuator */
 #include <argos3/plugins/robots/generic/control_interface/ci_leds_actuator.h>
+#include <argos3/plugins/robots/generic/control_interface/ci_range_and_bearing_sensor.h>
 
 using namespace std;
 using namespace argos;
@@ -41,6 +42,10 @@ class MPFA_controller : public BaseController {
   size_t     GetTravelingTime();//qilu 09/26/2016
   string     GetStatus();//qilu 09/26/2016
   size_t     GetNumHeldFood();
+  void       setMsg();//vsurjadidjaja 04/10/2019
+  string     getMsg();//vsurjadidjaja 04/10/2019
+  void       setCoor();//vsurjadidjaja 04/10/2019
+  int        getCoor();//vsurjadidjaja 04/10/2019
   //void        AddTravelingTime(size_t remainderTime);//qilu 09/26/2016
   //void        AddSearchingTime(size_t remainderTime);//qilu 09/26/2016
   size_t      startTime;//qilu 09/26/2016
