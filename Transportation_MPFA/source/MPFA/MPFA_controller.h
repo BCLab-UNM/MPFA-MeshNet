@@ -8,6 +8,9 @@
 #include <argos3/core/simulator/entity/floor_entity.h>
 /* Definition of the LEDs actuator */
 #include <argos3/plugins/robots/generic/control_interface/ci_leds_actuator.h>
+/* Definition of the range and bearing actuator */
+#include <argos3/plugins/robots/generic/control_interface/ci_range_and_bearing_actuator.h>
+/* Definition of the range and bearing sensor */
 #include <argos3/plugins/robots/generic/control_interface/ci_range_and_bearing_sensor.h>
 
 using namespace std;
@@ -129,7 +132,11 @@ class MPFA_controller : public BaseController {
 
 		unsigned int survey_count;
 		/* Pointer to the LEDs actuator */
-        CCI_LEDsActuator* m_pcLEDs;
+		CCI_LEDsActuator* m_pcLEDs;
+		/* Pointer to the range and bearing actuator */
+		CCI_RangeAndBearingActuator*  m_pcRABA;
+		/* Pointer to the range and bearing sensor */
+		CCI_RangeAndBearingSensor* m_pcRABS;
 };
 
 #endif /* MPFA_CONTROLLER_H */

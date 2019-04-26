@@ -13,16 +13,18 @@ MPFA_controller::MPFA_controller() :
 	SearchTime(0),
 	MPFA_state(DEPARTING),
 	LoopFunctions(NULL),
-    ClosestNest(NULL),
-    TargetNest(NULL), 
+	ClosestNest(NULL),
+	TargetNest(NULL), 
 	survey_count(0),
 	isUsingPheromone(0),
-    SiteFidelityPosition(1000, 1000), 
-    searchingTime(0),
-    travelingTime(0),
-    startTime(0),
-    m_pcLEDs(NULL),
-    updateFidelity(false)
+	SiteFidelityPosition(1000, 1000), 
+	searchingTime(0),
+	travelingTime(0),
+	startTime(0),
+	m_pcLEDs(NULL),
+	m_pcRABA(NULL),
+	m_pcRABS(NULL),
+	updateFidelity(false)
 {
 }
 
@@ -31,6 +33,9 @@ void MPFA_controller::Init(argos::TConfigurationNode &node) {
 	wheelActuator   = GetActuator<argos::CCI_DifferentialSteeringActuator>("differential_steering");
 	proximitySensor = GetSensor<argos::CCI_FootBotProximitySensor>("footbot_proximity");
 	argos::TConfigurationNode settings = argos::GetNode(node, "settings");
+
+	m_pcRABA = GetActuator<CCI_RangeAndBearingActuator>("range_and_bearing");
+	m_pcRABS = GetSensor<CCI_RangeAndBearingSensor>("range_and_bearing");
 
 	argos::GetNodeAttribute(settings, "FoodDistanceTolerance",   FoodDistanceTolerance);
 	argos::GetNodeAttribute(settings, "TargetDistanceTolerance", TargetDistanceTolerance);
