@@ -77,16 +77,17 @@ void MPFA_controller::Init(argos::TConfigurationNode &node) {
 }
 
 void MPFA_controller::ControlStep() {
-	/*
-	ofstream log_output_stream;
-	log_output_stream.open("MPFA_log.txt", ios::app);
+  /*	
+  ofstream log_output_stream;
+    log_output_stream.open("MPFA_log.txt", ios::app);
 
 	// depart from nest after food drop off or simulation start
 	if (isHoldingFood) log_output_stream << "(Carrying) ";
 	
 	switch(MPFA_state)  {
 		case DEPARTING:
-			if (isUsingSiteFidelity) {
+		  
+		  	if (isUsingSiteFidelity) {
 				log_output_stream << "DEPARTING (Fidelity): "
 					<< GetTarget().GetX() << ", " << GetTarget().GetY()
 					<< endl;
@@ -96,24 +97,25 @@ void MPFA_controller::ControlStep() {
 			} else {
 				log_output_stream << "DEPARTING (Searching): "
 				<< GetTarget().GetX() << ", " << GetTarget().GetY() << endl;
-			}
+				}
 			break;
 		// after departing(), once conditions are met, begin searching()
 		case SEARCHING:
-			if (isInformed) log_output_stream << "SEARCHING: Informed" << endl;     
-			else log_output_stream << "SEARCHING: UnInformed" << endl;
+		  if (isInformed) log_output_stream << "SEARCHING: Informed" << endl;     
+		    else log_output_stream << "SEARCHING: UnInformed" << endl;
 			break;
 		// return to nest after food pick up or giving up searching()
 		case RETURNING:
-			log_output_stream << "RETURNING" << endl;
+		  log_output_stream << "RETURNING" << endl;
 			break;
 		case SURVEYING:
-			log_output_stream << "SURVEYING" << endl;
+		  log_output_stream << "SURVEYING" << endl;
 			break;
 		default:
-			log_output_stream << "Unknown state" << endl;
+		  log_output_stream << "Unknown state" << endl;
+		  break;
 	}
-	*/
+  */
 
 	// Add line so we can draw the trail
 
@@ -151,6 +153,9 @@ void MPFA_controller::Reset() {
     
     TrailToShare.clear();
     TrailToFollow.clear();
+
+    m_pcRABA->ClearData();
+    m_pcRABA->SetData(0, 1);
 }
 
 bool MPFA_controller::IsHoldingFood() {
@@ -331,7 +336,10 @@ void MPFA_controller::Delivering(){
             SetIsHeadingToNest(true);
             SetTarget(ClosestNest->GetLocation()); 
             MPFA_state = DEPOT_RETURNING;  
-            numHeldFood = 0;   
+            numHeldFood = 0;
+
+
+	    
         }
 	
 }
@@ -347,7 +355,11 @@ void MPFA_controller::Idling()
 	}
 	
 	size_t numCollectedFood = ClosestNest->FoodList.size();
-	size_t packSize = ClosestNest->GetDeliveryCapacity(); 
+	size_t packSize = ClosestNest->GetDeliveryCapacity();
+	
+	//Depots need to listen to nearby swarmies and get their recorded resource coordinates.
+	const CCI_RangeAndBearingSensor::TReadings& tPackets = m_pcRABS->GetReadings(); //vsurjadidjaja 04/2019
+	
     if(numCollectedFood >= packSize){
 		ClosestNest->FoodList.erase(ClosestNest->FoodList.begin(), ClosestNest->FoodList.begin()+packSize);
 		isHoldingFood = true;
@@ -358,11 +370,10 @@ void MPFA_controller::Idling()
 	}	
 }
 
-
-
 void MPFA_controller::DepotReturning(){
 	if(IsInTheNest()) {
-		 MPFA_state = DEPOT_IDLING; 
+		 MPFA_state = DEPOT_IDLING;
+		 //vsurjadidjaja: Depot needs to get quadrant distribution info for the swarmies so that they can figure out if its worth it to stay in their quadrant or gradually move to another.
 	}		
 }
 

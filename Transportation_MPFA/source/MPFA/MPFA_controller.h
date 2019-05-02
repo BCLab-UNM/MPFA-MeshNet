@@ -52,7 +52,6 @@ class MPFA_controller : public BaseController {
   //void        AddTravelingTime(size_t remainderTime);//qilu 09/26/2016
   //void        AddSearchingTime(size_t remainderTime);//qilu 09/26/2016
   size_t      startTime;//qilu 09/26/2016
-        
 
 	private:
   Nest* ClosestNest; //qilu 07/26/2016
@@ -69,6 +68,7 @@ class MPFA_controller : public BaseController {
 
 		/* robot position variables */
 		argos::CVector2 SiteFidelityPosition;
+
   bool			 updateFidelity; //qilu 09/07/2016
   
 		vector<CRay3> myTrail;
