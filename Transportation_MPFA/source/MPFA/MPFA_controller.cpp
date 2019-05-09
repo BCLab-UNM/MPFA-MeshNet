@@ -359,6 +359,7 @@ void MPFA_controller::Idling()
 	
 	//Depots need to listen to nearby swarmies and get their recorded resource coordinates.
 	const CCI_RangeAndBearingSensor::TReadings& tPackets = m_pcRABS->GetReadings(); //vsurjadidjaja 04/2019
+	argos::LOG<< "Listening: "<<m_pcRABS <<std::endl;
 	
     if(numCollectedFood >= packSize){
 		ClosestNest->FoodList.erase(ClosestNest->FoodList.begin(), ClosestNest->FoodList.begin()+packSize);
@@ -623,7 +624,9 @@ void MPFA_controller::Returning()
    //LOG<<"Returning..."<<endl;
    //SetHoldingFood();
    //SetTarget(LoopFunctions->NestPosition);
-
+  CVector2 position = m_pcPS->GetReading().Position;
+  m_pcRABA->SetData(0, position);
+  
   // Are we there yet? (To the nest, that is.)
   if(IsInTheNest()) 
   {
@@ -649,6 +652,7 @@ void MPFA_controller::Returning()
       
       if(ClosestNest->GetNestIdx() == 0) //center nest
       {
+	//TODO: Need to report coordinates to center nest? -vsurjadidjaja 05/19
 		total_targets_collected ++;
         LoopFunctions->setScore(total_targets_collected);
         LoopFunctions->currNumCollectedFood ++;  
@@ -659,7 +663,7 @@ void MPFA_controller::Returning()
       if(poissonCDF_pLayRate > r1 && updateFidelity) 
       {
 		TrailToShare.push_back(ClosestNest->GetLocation()); //qilu 07/26/2016
-        argos::Real timeInSeconds = (argos::Real)(SimulationTick() / SimulationTicksPerSecond());
+         argos::Real timeInSeconds = (argos::Real)(SimulationTick() / SimulationTicksPerSecond());
 	    Pheromone sharedPheromone(SiteFidelityPosition, TrailToShare, timeInSeconds, LoopFunctions->RateOfPheromoneDecay, ResourceDensity);
         ClosestNest->PheromoneList.push_back(sharedPheromone);//qilu 09/08/2016
         ClosestNest->DensityOnFidelity.erase(controllerID); //09/11/2016 if it creates a pheromone trail, the sensed density on site fidelity should be removed. Otherwise, there is a repeated information.
@@ -693,7 +697,7 @@ void MPFA_controller::Returning()
       isInformed = false;
       isUsingSiteFidelity = false;
     }
-
+    
     isGivingUpSearch = false;
     MPFA_state = DEPARTING;
     isHoldingFood = false;

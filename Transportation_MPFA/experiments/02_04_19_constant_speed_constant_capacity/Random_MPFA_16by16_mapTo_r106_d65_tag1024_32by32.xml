@@ -16,7 +16,8 @@
     <MPFA_controller id="MPFA" library="build/source/MPFA/libMPFA_controller">
       <actuators>
         <differential_steering implementation="default"/>
-        <leds implementation="default" medium="leds"/> 
+        <leds implementation="default" medium="leds"/>
+	<range_and_bearing implementation="default" />
       </actuators>
 
       <sensors>
@@ -25,6 +26,8 @@
 	<positioning implementation="default"/>	
 
         <footbot_motor_ground implementation="rot_z_only"/>
+
+	<range_and_bearing implementation="medium" medium="rab" />
       </sensors>
 
       <params>
@@ -416,7 +419,10 @@ NestRadius="0.2" NumberOfClusters="4" OutputData="0" PowerlawFoodUnitCount="256"
   <!-- ********* -->
   <!-- * Media * -->
   <!-- ********* -->
-  <media><led id="leds"/></media>
+  <media>
+  <led id="leds"/>
+  <range_and_bearing id="rab" />
+  </media>
   <!-- ****************** -->
   <!-- * Visualization * -->
   <!-- ****************** -->
